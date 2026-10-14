@@ -610,9 +610,7 @@ function FilesContent() {
     }
 
     if (uploadedByFilter.length > 0) {
-      result = result.filter(
-        (f) => f.uploadedBy !== null && uploadedByFilter.includes(f.uploadedBy)
-      )
+      result = result.filter((f) => uploadedByFilter.includes(f.uploadedBy))
     }
 
     return result
@@ -645,7 +643,7 @@ function FilesContent() {
                 : sortColumn === 'updated'
                   ? new Date(folder.updatedAt).getTime()
                   : sortColumn === 'owner'
-                    ? (membersById.get(folder.userId ?? '')?.name ?? null)
+                    ? (membersById.get(folder.userId)?.name ?? null)
                     : folder.name,
       })
     }
@@ -665,7 +663,7 @@ function FilesContent() {
                 : sortColumn === 'updated'
                   ? new Date(file.updatedAt).getTime()
                   : sortColumn === 'owner'
-                    ? (membersById.get(file.uploadedBy ?? '')?.name ?? null)
+                    ? (membersById.get(file.uploadedBy)?.name ?? null)
                     : file.name,
       })
     }
@@ -707,9 +705,7 @@ function FilesContent() {
                 label: FOLDER_TYPE_LABEL,
               },
               created: timeCell(folder.createdAt),
-              owner: folder.userId
-                ? ownerCell(folder.userId, membersById)
-                : { label: 'Deleted user' },
+              owner: ownerCell(folder.userId, membersById),
               updated: timeCell(folder.updatedAt),
               /**
                * A folder's location is its parent's path, not its own. Built only while
@@ -743,9 +739,7 @@ function FilesContent() {
               label: formatFileBrowserType(file.type, file.name),
             },
             created: timeCell(file.uploadedAt),
-            owner: file.uploadedBy
-              ? ownerCell(file.uploadedBy, membersById)
-              : { label: 'Deleted user' },
+            owner: ownerCell(file.uploadedBy, membersById),
             updated: timeCell(file.updatedAt),
             location: isSearching
               ? { label: folderLocationLabel(file.folderId, folderById, FILES_HEADER.rootLabel) }
