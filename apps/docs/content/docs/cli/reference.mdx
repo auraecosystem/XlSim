@@ -4647,6 +4647,57 @@ sim projects files describe <projectId> <fileId>
 
 </CommandTable>
 
+### sim projects files share get
+
+Show a Project file’s share settings (OAuth login or personal API key required)
+
+```bash
+sim projects files share get <projectId> <fileId>
+```
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project identifier. |
+| `fileId` | Yes | File identifier within the Project. |
+
+</CommandTable>
+
+### sim projects files share set
+
+Enable or disable sharing for a Project file (OAuth login or personal API key required)
+
+```bash
+sim projects files share set <projectId> <fileId> [options]
+```
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project identifier. |
+| `fileId` | Yes | File identifier within the Project. |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--is-active <true\|false>` | Yes | Whether the share should resolve. Disabling preserves the token and the whole access configuration, so re-enabling restores the share as it was; enabling rewrites the credentials the resulting mode does not use. Accepted values: `true`, `false`. |
+| `--auth-type <value>` | No | How access to the share is gated. The stored mode is kept when omitted. Enabling `public` clears the stored password and empties `allowedEmails`; `password` empties `allowedEmails`; `email` and `sso` clear the stored password. Accepted values: `public`, `password`, `email`, `sso`. |
+| `--password <value>` | No | Literal password of 15 to 1024 characters. Kept when omitted; enabling password access without a supplied or stored password is rejected. |
+| `--allowed-emails <value...>` | No | Allowed addresses or `@domain` patterns for email and SSO shares. Kept when omitted; enabling `email` or `sso` with an empty resulting list is a 400. (space-separated, or @path / @- with one value per line; @@value for a literal leading @). |
+
+</CommandTable>
+
 ### sim projects files list
 
 List Project Files (OAuth login or personal API key required)

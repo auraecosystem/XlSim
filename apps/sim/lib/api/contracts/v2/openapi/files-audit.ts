@@ -39,6 +39,7 @@ import {
 } from '@/lib/api/contracts/v2/files'
 import { projectFileDownloadOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-downloads'
 import { projectFileFolderOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-folders'
+import { projectFileShareOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-shares'
 import { projectFileUploadOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-uploads'
 import { projectFileVersionOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-versions'
 import { projectFileOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-files'
@@ -191,6 +192,7 @@ const declaredRoutes = [
   ...projectFileDownloadOpenApiRoutes,
   ...projectFileVersionOpenApiRoutes,
   ...projectFileFolderOpenApiRoutes,
+  ...projectFileShareOpenApiRoutes,
   ...projectFileUploadOpenApiRoutes,
   defineOpenApiRoute(
     v2ListFilesContract,
