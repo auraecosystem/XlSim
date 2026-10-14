@@ -201,6 +201,10 @@ import {
 } from '@/lib/api/contracts/v2/project-file-lifecycle'
 import { v2SearchProjectFileContentContract } from '@/lib/api/contracts/v2/project-file-search'
 import {
+  v2GetProjectFileShareContract,
+  v2UpdateProjectFileShareContract,
+} from '@/lib/api/contracts/v2/project-file-shares'
+import {
   v2AbortProjectFileUploadContract,
   v2CompleteProjectFileUploadContract,
   v2CreateProjectFileUploadContract,
@@ -1562,6 +1566,17 @@ export const V2_MCP_OPERATIONS = {
     workspaceKeyUnsupported: true,
     handler: () =>
       import('@/app/api/v2/projects/[projectId]/files/[fileId]/metadata/route').then(
+        (route) => route.GET
+      ),
+  },
+  getProjectFileShare: {
+    contract: v2GetProjectFileShareContract,
+    summary: 'Get Project File Share',
+    description:
+      "Get a Project file's public-share configuration. An unshared file returns data: null; a disabled share retains its configuration with isActive: false. Workspace API keys return `403`; use a personal API key or scoped OAuth token.\n\nOAuth scope: `api:read`.",
+    workspaceKeyUnsupported: true,
+    handler: () =>
+      import('@/app/api/v2/projects/[projectId]/files/[fileId]/share/route').then(
         (route) => route.GET
       ),
   },
@@ -3081,6 +3096,17 @@ export const V2_MCP_OPERATIONS = {
     workspaceKeyUnsupported: true,
     handler: () =>
       import('@/app/api/v2/projects/[projectId]/files/folders/[folderId]/route').then(
+        (route) => route.PATCH
+      ),
+  },
+  updateProjectFileShare: {
+    contract: v2UpdateProjectFileShareContract,
+    summary: 'Update Project File Share',
+    description:
+      "Create or update a Project file's public share. isActive is required; omitted settings retain their current values except credentials unused by the selected access mode, which are cleared. Disabling retains the token and access configuration. Publication requires Project edit access and the current sharing policy across accessible active environments. Workspace API keys return `403`; use a personal API key or scoped OAuth token.\n\nOAuth scope: `api:write`.",
+    workspaceKeyUnsupported: true,
+    handler: () =>
+      import('@/app/api/v2/projects/[projectId]/files/[fileId]/share/route').then(
         (route) => route.PATCH
       ),
   },
