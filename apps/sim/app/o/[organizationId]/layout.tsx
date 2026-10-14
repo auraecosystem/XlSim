@@ -8,6 +8,7 @@ import { getActiveOrganizationId } from '@/lib/auth/session-response'
 import { canUseBenchmarks } from '@/lib/benchmarks/config'
 import { isChangelogEnabled } from '@/lib/changelog/feature-flag'
 import { isComputerUseAvailable } from '@/lib/computer-use/availability.server'
+import { isFeatureEnabled } from '@/lib/core/config/feature-flags'
 import { isDashboardsEnabled } from '@/lib/dashboards/feature-flag'
 import { isMothershipModelSelectorEnabled } from '@/lib/mothership/feature-flags'
 import { organizationRoutes, WORKSPACE_SETTINGS_PATH } from '@/lib/navigation/paths'
@@ -71,6 +72,7 @@ export default async function OrganizationLayout({
     dashboardsEnabled,
     benchmarkEnabled,
     computerUseEnabled,
+    projectsEnabled,
     workflowTestsEnabled,
     changelogEnabled,
   ] = await Promise.all([
@@ -87,6 +89,7 @@ export default async function OrganizationLayout({
       return false
     }),
     isComputerUseAvailable(),
+    isFeatureEnabled('projects'),
     isWorkflowTestsEnabled(organizationId),
     isChangelogEnabled(organizationId),
   ])
@@ -96,6 +99,8 @@ export default async function OrganizationLayout({
     <HydrationBoundary state={dehydrate(queryClient)}>
       <FeatureFlagsProvider
         flags={{
+          projects: projectsEnabled,
+
           dashboards: dashboardsEnabled,
           'workflow-tests': workflowTestsEnabled,
           changelog: changelogEnabled,

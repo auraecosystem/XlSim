@@ -8,6 +8,7 @@ import { getSession } from '@/lib/auth'
 import { getActiveOrganizationId } from '@/lib/auth/session-response'
 import { isChangelogEnabled } from '@/lib/changelog/feature-flag'
 import { isComputerUseAvailable } from '@/lib/computer-use/availability.server'
+import { isFeatureEnabled } from '@/lib/core/config/feature-flags'
 import { isDashboardsEnabled } from '@/lib/dashboards/feature-flag'
 import {
   hasDesktopBackgroundExecutor,
@@ -127,6 +128,7 @@ async function WorkspaceContent({
     planModeEnabled,
     organizationHref,
     dashboardsEnabled,
+    projectsEnabled,
     workflowTestsEnabled,
     changelogEnabled,
     desktopExecutorRegistered,
@@ -145,6 +147,7 @@ async function WorkspaceContent({
     isPlanModeEnabled(session.user.id).catch(() => false),
     resolveOrganizationEntryPath(session),
     isDashboardsEnabled(hostContext.hostOrganizationId),
+    isFeatureEnabled('projects'),
     isWorkflowTestsEnabled(hostContext.hostOrganizationId),
     isChangelogEnabled(hostContext.hostOrganizationId),
     hasDesktopBackgroundExecutor(session.user.id),
@@ -158,6 +161,8 @@ async function WorkspaceContent({
     <HydrationBoundary state={dehydrate(queryClient)}>
       <FeatureFlagsProvider
         flags={{
+          projects: projectsEnabled,
+
           dashboards: dashboardsEnabled,
           'workflow-tests': workflowTestsEnabled,
           changelog: changelogEnabled,
