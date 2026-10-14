@@ -866,6 +866,25 @@ sim files batch-delete [options]
 
 </CommandTable>
 
+### sim files copy
+
+Copy File Items (OAuth login or personal API key required)
+
+```bash
+sim files copy [options]
+```
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--source <json\|@file>` | Yes | Source owner and selected fileIds or folderIds (JSON, or @path / @- to read a file or stdin). |
+| `--destination <json\|@file>` | Yes | Destination owner and optional folderId (JSON, or @path / @- to read a file or stdin). |
+
+</CommandTable>
+
 ### sim files create
 
 Create File
@@ -4775,6 +4794,35 @@ sim projects files search <projectId> [options]
 
 </CommandTable>
 
+### sim projects files unzip
+
+Unzip an archive into a new folder beside it in the Project (OAuth login or personal API key required)
+
+```bash
+sim projects files unzip <projectId> <fileId> [options]
+```
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project identifier. |
+| `fileId` | Yes | File identifier within the Project. |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `-y, --yes` | Yes | Confirm this operation. |
+
+</CommandTable>
+
 ### sim projects files set-content
 
 Replace a shared Project file’s contents (OAuth login or personal API key required)
@@ -4862,6 +4910,68 @@ sim projects files source <projectId> <fileId> [options]
 | Option | Required | Description |
 | --- | --- | --- |
 | `-o, --output-file <path>` | No | Write content to a file instead of stdout. |
+| `--force` | No | Overwrite --output-file if it already exists. |
+
+</CommandTable>
+
+### sim projects files bulk-download
+
+Download Project files and recursive folder contents as a zip archive (OAuth login or personal API key required)
+
+```bash
+sim projects files bulk-download <projectId> [options]
+```
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project that owns the files |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--file-ids <id...>` | No | File identifiers to include. |
+| `--folder-ids <id...>` | No | Folder identifiers to include recursively. |
+| `-o, --output-file <path>` | No | Write the archive to a file instead of stdout. |
+| `--force` | No | Overwrite --output-file if it already exists. |
+
+</CommandTable>
+
+### sim projects files export
+
+Export a visible Project Markdown snapshot with its embedded assets (OAuth login or personal API key required)
+
+```bash
+sim projects files export <projectId> <fileId> [options]
+```
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project that owns the file |
+| `fileId` | Yes | Markdown file whose visible snapshot to export |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--content <text\|@file\|@->` | Yes | Visible Markdown content or a file to read. |
+| `-o, --output-file <path>` | No | Write the export to a file instead of stdout. |
 | `--force` | No | Overwrite --output-file if it already exists. |
 
 </CommandTable>
