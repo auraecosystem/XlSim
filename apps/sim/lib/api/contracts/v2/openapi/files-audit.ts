@@ -1,4 +1,5 @@
 import { v2GetAuditLogContract, v2ListAuditLogsContract } from '@/lib/api/contracts/v2/audit-logs'
+import { v2CopyFileItemsContract } from '@/lib/api/contracts/v2/file-copy'
 import {
   v2DeleteFileVersionContract,
   v2DownloadFileVersionContract,
@@ -36,6 +37,7 @@ import {
   v2UpdateFileContentContract,
   v2UpsertFileShareContract,
 } from '@/lib/api/contracts/v2/files'
+import { projectFileDownloadOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-downloads'
 import { projectFileFolderOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-folders'
 import { projectFileUploadOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-uploads'
 import { projectFileVersionOpenApiRoutes } from '@/lib/api/contracts/v2/openapi/project-file-versions'
@@ -67,6 +69,7 @@ import {
   type OpenApiSuccessMetadata,
 } from '@/lib/api/openapi/types'
 import { auditLogOperations } from '@/lib/audit-logs/application/operations'
+import { fileCopyOperation } from '@/lib/workspace-files/application/copy-operation'
 import { fileOperations } from '@/lib/workspace-files/application/operations'
 import { MAX_ZIP_DOWNLOAD_FILES } from '@/lib/workspace-files/limits'
 
@@ -158,7 +161,34 @@ function auditOperation(
 }
 
 const declaredRoutes = [
+  defineOpenApiRoute(
+    v2CopyFileItemsContract,
+    filesOperation({
+      applicationOperation: fileCopyOperation,
+      operationId: 'copyFileItems',
+      summary: 'Copy File Items',
+      description: `Copy selected files and folder trees between workspace or Project owners. Source read and destination write access are checked independently. Copies receive new identities and retain source secret provenance. Registration is atomic, with destination names resolved by the existing copy rules. ${WORKSPACE_API_KEY_DENIED}`,
+      errors: [...RESOURCE_CONFLICT_ERRORS, 'PayloadTooLarge'],
+      success: { description: 'New file and folder identities with their destination owner.' },
+    }),
+    {
+      query: v2CopyFileItemsContract.query,
+      body: documentedSchema(
+        v2CopyFileItemsContract.body,
+        'CopyFileItemsRequest',
+        'Copy file items request',
+        'Exact source owner and selected identifiers, plus the destination owner and folder.'
+      ),
+      response: documentedSchema(
+        v2CopyFileItemsContract.response.schema,
+        'V2CopyFileItemsResponse',
+        'Copy file items response',
+        'Created files and folders, without private storage keys.'
+      ),
+    }
+  ),
   ...projectFileOpenApiRoutes,
+  ...projectFileDownloadOpenApiRoutes,
   ...projectFileVersionOpenApiRoutes,
   ...projectFileFolderOpenApiRoutes,
   ...projectFileUploadOpenApiRoutes,

@@ -486,6 +486,35 @@ Search Project File Content (OAuth login or personal API key required)
 
 </CommandTable>
 
+## Unzip an archive into a new folder beside it in the project
+
+```bash
+sim projects files unzip <projectId> <fileId> [options]
+```
+
+Unzip an archive into a new folder beside it in the Project (OAuth login or personal API key required)
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project identifier. |
+| `fileId` | Yes | File identifier within the Project. |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `-y, --yes` | Yes | Confirm this operation. |
+
+</CommandTable>
+
 ## Replace a shared project file’s contents
 
 ```bash
@@ -571,6 +600,68 @@ Download a Project file’s stored source to stdout or a local file (OAuth login
 | Option | Required | Description |
 | --- | --- | --- |
 | `-o, --output-file <path>` | No | Write content to a file instead of stdout. |
+| `--force` | No | Overwrite --output-file if it already exists. |
+
+</CommandTable>
+
+## Download project files and recursive folder contents as a zip archive
+
+```bash
+sim projects files bulk-download <projectId> [options]
+```
+
+Download Project files and recursive folder contents as a zip archive (OAuth login or personal API key required)
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project that owns the files |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--file-ids <id...>` | No | File identifiers to include. |
+| `--folder-ids <id...>` | No | Folder identifiers to include recursively. |
+| `-o, --output-file <path>` | No | Write the archive to a file instead of stdout. |
+| `--force` | No | Overwrite --output-file if it already exists. |
+
+</CommandTable>
+
+## Export a visible project markdown snapshot with its embedded assets
+
+```bash
+sim projects files export <projectId> <fileId> [options]
+```
+
+Export a visible Project Markdown snapshot with its embedded assets (OAuth login or personal API key required)
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project that owns the file |
+| `fileId` | Yes | Markdown file whose visible snapshot to export |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--content <text\|@file\|@->` | Yes | Visible Markdown content or a file to read. |
+| `-o, --output-file <path>` | No | Write the export to a file instead of stdout. |
 | `--force` | No | Overwrite --output-file if it already exists. |
 
 </CommandTable>

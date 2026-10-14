@@ -605,7 +605,7 @@ export async function resolveWorkspaceFileFolderTarget(
 }
 
 /** Checks an active destination without treating a foreign folder ID as a root selection. */
-async function assertFileFolderTarget(
+export async function assertFileFolderTarget(
   owner: EditableFileOwner,
   folderId?: string | null,
   client: DbOrTx = db

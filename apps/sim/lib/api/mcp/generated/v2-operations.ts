@@ -59,6 +59,7 @@ import {
   v2ListCustomToolsContract,
   v2UpdateCustomToolContract,
 } from '@/lib/api/contracts/v2/custom-tools'
+import { v2CopyFileItemsContract } from '@/lib/api/contracts/v2/file-copy'
 import {
   v2DeleteFileVersionContract,
   v2GetFileVersionContract,
@@ -185,6 +186,7 @@ import {
   v2RemovePermissionGroupMemberContract,
   v2UpdatePermissionGroupContract,
 } from '@/lib/api/contracts/v2/permission-groups'
+import { v2UnzipProjectFileContract } from '@/lib/api/contracts/v2/project-file-extraction'
 import {
   v2CreateProjectFileFolderContract,
   v2ListProjectFileFoldersContract,
@@ -681,6 +683,14 @@ export const V2_MCP_OPERATIONS = {
       'Verify or assemble uploaded CSV bytes and start processing under the same import ID. Requires an import awaiting upload completion; other states return `409`. Unknown or purged imports return `404`.\n\nOAuth scope: `api:write`.',
     handler: () =>
       import('@/app/api/v2/tables/imports/[importId]/complete/route').then((route) => route.POST),
+  },
+  copyFileItems: {
+    contract: v2CopyFileItemsContract,
+    summary: 'Copy File Items',
+    description:
+      'Copy selected files and folder trees between workspace or Project owners. Source read and destination write access are checked independently. Copies receive new identities and retain source secret provenance. Registration is atomic, with destination names resolved by the existing copy rules. Workspace API keys return `403`; use a personal API key or scoped OAuth token.\n\nOAuth scope: `api:write`.',
+    workspaceKeyUnsupported: true,
+    handler: () => import('@/app/api/v2/files/copy/route').then((route) => route.POST),
   },
   createCredentialConnection: {
     contract: v2CreateCredentialConnectionContract,
@@ -2901,6 +2911,17 @@ export const V2_MCP_OPERATIONS = {
     description:
       'Extract a ZIP archive into a new sibling folder and return counts and the destination path. Use List Files to inspect its contents. Large archives can take minutes; concurrent extraction of the same archive returns `409`. Size or processing-time limits return `413`.\n\nOAuth scope: `api:write`.',
     handler: () => import('@/app/api/v2/files/[fileId]/unzip/route').then((route) => route.POST),
+  },
+  unzipProjectFile: {
+    contract: v2UnzipProjectFileContract,
+    summary: 'Unzip Project File',
+    description:
+      'Extract a ZIP archive into a new sibling folder in the same Project. Use List Project Files to inspect its contents. Concurrent extraction of the same archive returns `409`; size or processing-time limits return `413`. Workspace API keys return `403`; use a personal API key or scoped OAuth token.\n\nOAuth scope: `api:write`.',
+    workspaceKeyUnsupported: true,
+    handler: () =>
+      import('@/app/api/v2/projects/[projectId]/files/[fileId]/unzip/route').then(
+        (route) => route.POST
+      ),
   },
   updateCredential: {
     contract: v2UpdateCredentialContract,

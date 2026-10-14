@@ -1,6 +1,8 @@
 export { readProjectFileArtifact } from './artifacts'
 export { getProjectFileListAccess } from './collection-access'
 export { createProjectFile, readProjectFileContent, updateProjectFileContent } from './content'
+export { downloadProjectFileItems, exportProjectFileSnapshot } from './downloads'
+export { extractProjectFile } from './extract'
 export { createProjectFileFolder, listProjectFileFolders, updateProjectFileFolder } from './folders'
 export {
   archiveProjectFileItems,
