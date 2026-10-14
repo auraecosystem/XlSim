@@ -197,6 +197,7 @@ import {
   v2RenameProjectFileContract,
   v2RestoreProjectFileContract,
 } from '@/lib/api/contracts/v2/project-file-lifecycle'
+import { v2SearchProjectFileContentContract } from '@/lib/api/contracts/v2/project-file-search'
 import {
   v2AbortProjectFileUploadContract,
   v2CompleteProjectFileUploadContract,
@@ -2807,6 +2808,15 @@ export const V2_MCP_OPERATIONS = {
     description:
       'Search one or more knowledge bases with semantic vector retrieval, optional hybrid full-text retrieval, and structured tag filters. Every result names the `knowledgeBaseId` it came from. A request body over 2 MiB is a `413`. Reranking returns `409` when the stored results cannot pass secret-provenance enforcement.\n\nOAuth scope: `api:read`.',
     handler: () => import('@/app/api/v2/knowledge/search/route').then((route) => route.POST),
+  },
+  searchProjectFileContent: {
+    contract: v2SearchProjectFileContentContract,
+    summary: 'Search Project File Content',
+    description:
+      'Search indexed text in active Project files, returning matching lines with file IDs and line numbers. Folder filters narrow both results and reported coverage. Missing matches are inconclusive when complete is false, or skippedFiles or partialFiles is nonzero. truncated means additional matches exist beyond maxResults. Workspace API keys return `403`; use a personal API key or scoped OAuth token.\n\nOAuth scope: `api:read`.',
+    workspaceKeyUnsupported: true,
+    handler: () =>
+      import('@/app/api/v2/projects/[projectId]/files/search/route').then((route) => route.GET),
   },
   searchTableRows: {
     contract: v2SearchTableRowsContract,

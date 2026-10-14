@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { ensureFileNameExtension } from '@/lib/uploads/utils/file-utils'
 
 const SAFE_INLINE_TYPES = new Set([
@@ -93,7 +94,7 @@ export const FILE_CACHE_CONTROL = {
 } as const
 
 /** Constructs identical security and filename headers for buffered and streamed representations. */
-function fileDeliveryHeaders(input: {
+export function fileDeliveryHeaders(input: {
   filename: string
   contentType: string
   cacheControl: string
@@ -115,6 +116,11 @@ function fileDeliveryHeaders(input: {
       "default-src 'none'; style-src 'unsafe-inline'; sandbox;"
     )
   return headers
+}
+
+/** Hash only already-buffered representations; streamed downloads never need materializing. */
+export function bufferedRepresentationEtag(buffer: Buffer): string {
+  return `"${createHash('sha256').update(buffer).digest('base64url')}"`
 }
 
 /** Binary presenters share header assembly without coupling storage mechanics to a route framework. */
@@ -139,4 +145,14 @@ export function presentFileDelivery(input: {
     contentLength: input.contentLength,
     headers,
   }
+}
+
+/** Immutable workspace caching requires a fixed storage object and no live referenced inputs. */
+export function workspaceFileCacheControl(
+  contentAddressed: boolean,
+  dependsOnReferencedFiles = false
+): string {
+  return contentAddressed && !dependsOnReferencedFiles
+    ? FILE_CACHE_CONTROL.immutable
+    : FILE_CACHE_CONTROL.revalidate
 }

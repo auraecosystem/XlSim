@@ -453,6 +453,39 @@ Restore Project File (OAuth login or personal API key required)
 
 </CommandTable>
 
+## Search project file content
+
+```bash
+sim projects files search <projectId> [options]
+```
+
+Search Project File Content (OAuth login or personal API key required)
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project identifier. |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--query <value>` | Yes | Regular expression, or exact text when `mode` is `exact`. |
+| `--mode <value>` | No | How `query` is read. Accepted values: `exact`, `regex`. |
+| `--max-results <value>` | No | Maximum matching lines to return. |
+| `--folder <value...>` | No | Folder path as shown in the app; the leading / is optional (space-separated, or @path / @- with one value per line; @@value for a literal leading @). |
+| `--include-subfolders` | No | Whether the scope descends into nested folders. Absent means yes. |
+| `--no-include-subfolders` | No | Send --include-subfolders as false. |
+
+</CommandTable>
+
 ## Replace a shared project file’s contents
 
 ```bash

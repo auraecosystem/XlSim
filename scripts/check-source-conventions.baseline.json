@@ -284,7 +284,6 @@
     "apps/sim/lib/uploads/contexts/workspace/workspace-file-manager-errors.test.ts": 1,
     "apps/sim/lib/uploads/contexts/workspace/workspace-file-manager.test.ts": 1,
     "apps/sim/lib/uploads/contexts/workspace/workspace-file-manager.ts": 1,
-    "apps/sim/lib/uploads/core/storage-client.ts": 1,
     "apps/sim/lib/webhooks/providers/table.ts": 1,
     "apps/sim/lib/webhooks/providers/whatsapp.test.ts": 1,
     "apps/sim/lib/workflows/comparison/normalize.test.ts": 1,

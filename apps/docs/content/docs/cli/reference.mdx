@@ -4742,6 +4742,39 @@ sim projects files restore <projectId> <fileId>
 
 </CommandTable>
 
+### sim projects files search
+
+Search Project File Content (OAuth login or personal API key required)
+
+```bash
+sim projects files search <projectId> [options]
+```
+
+**Arguments**
+
+<CommandTable>
+
+| Argument | Required | Description |
+| --- | --- | --- |
+| `projectId` | Yes | Project identifier. |
+
+</CommandTable>
+
+**Options**
+
+<CommandTable>
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--query <value>` | Yes | Regular expression, or exact text when `mode` is `exact`. |
+| `--mode <value>` | No | How `query` is read. Accepted values: `exact`, `regex`. |
+| `--max-results <value>` | No | Maximum matching lines to return. |
+| `--folder <value...>` | No | Folder path as shown in the app; the leading / is optional (space-separated, or @path / @- with one value per line; @@value for a literal leading @). |
+| `--include-subfolders` | No | Whether the scope descends into nested folders. Absent means yes. |
+| `--no-include-subfolders` | No | Send --include-subfolders as false. |
+
+</CommandTable>
+
 ### sim projects files set-content
 
 Replace a shared Project file’s contents (OAuth login or personal API key required)

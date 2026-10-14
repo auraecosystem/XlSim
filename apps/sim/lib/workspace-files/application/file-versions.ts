@@ -37,6 +37,7 @@ import {
 } from '@/lib/workspace-files/application/download-workspace-file'
 import { workspaceFileRevisionField } from '@/lib/workspace-files/application/file-revision'
 import { resolveWorkspaceFileVersionWrite } from '@/lib/workspace-files/application/file-version-write'
+import { finishFileDelivery } from '@/lib/workspace-files/application/finish-file-delivery'
 import { fileOperations } from '@/lib/workspace-files/application/operations'
 import { prepareOwnedFileContentWrite } from '@/lib/workspace-files/application/owned-file-content'
 import {
@@ -249,6 +250,24 @@ const downloadVersion = defineAuthorizedWorkspaceFileUseCase({
     const result = await readFileVersionObject(version.version, () =>
       streamWorkspaceFileRecord(recordAtVersion(file, version), principal)
     )
+    await finishFileDelivery({
+      async authorize() {
+        await downloadVersion.authorize({ principal, input })
+        const currentFile = await loadActiveFile(context)
+        const current = await loadVersion(currentFile, input.version)
+        if (
+          current.key !== version.key ||
+          (version.isCurrent &&
+            currentFile.contentUpdatedAt?.getTime() !== file.contentUpdatedAt?.getTime())
+        )
+          throw new OrchestrationError('conflict', 'The selected version changed during download')
+      },
+      receipt: {
+        owner: { entityType: 'workspace', entityId: context.workspaceId },
+        files: result.receipt?.files.filter((entry) => entry.id !== file.id) ?? [],
+      },
+      stream: result.stream,
+    })
     return { ...result, file, version }
   },
   projectAudit: ({ result }) => ({
