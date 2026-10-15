@@ -78,7 +78,7 @@ Docker must be installed and running. Use `-p, --port <port>` to run Sim on a di
 ### Docker Compose
 
 ```bash
-git clone https://github.com/simstudioai/sim.git && cd sim
+git clone https://github.com/auraecosystem/xlsim.git && cd clsim
 docker compose -f docker-compose.prod.yml up -d
 ```
 
@@ -93,8 +93,8 @@ Sim also supports local models via [Ollama](https://ollama.ai) and [vLLM](https:
 1. Clone and install:
 
 ```bash
-git clone https://github.com/simstudioai/sim.git
-cd sim
+git clone https://github.com/auraecosystem/xlsim.git
+cd xlsim
 bun install
 bun run prepare  # Set up pre-commit hooks
 ```
@@ -102,7 +102,7 @@ bun run prepare  # Set up pre-commit hooks
 2. Set up PostgreSQL with pgvector:
 
 ```bash
-docker run --name simstudio-db -e POSTGRES_PASSWORD=your_password -e POSTGRES_DB=simstudio -p 5432:5432 -d pgvector/pgvector:pg17
+docker run --name xlsim-db -e POSTGRES_PASSWORD=your_password -e POSTGRES_DB=xlsim -p 5432:5432 -d pgvector/pgvector:pg17
 ```
 
 Or install manually via the [pgvector guide](https://github.com/pgvector/pgvector#installation).
@@ -118,11 +118,12 @@ perl -i -pe "s/your_api_encryption_key/$(openssl rand -hex 32)/" apps/sim/.env
 # DB configs for migration
 cp packages/db/.env.example packages/db/.env
 # Edit both .env files to set DATABASE_URL="postgresql://postgres:your_password@localhost:5432/simstudio"
+docker run --name simstudio-db -e POSTGRES_PASSWORD=your_password -e POSTGRES_DB=simstudio -p 5432:5432 -d pgvector/pgvector:pg17
 ```
 
 4. Run migrations:
 
-```bash
+```shell
 cd packages/db && bun run db:migrate
 ```
 
@@ -130,6 +131,7 @@ cd packages/db && bun run db:migrate
 
 ```bash
 bun run dev:full  # Starts Next.js app and realtime socket server
+cd packages/db && bun run db:migrate
 ```
 
 Or run separately: `bun run dev` (Next.js) and `cd apps/sim && bun run dev:sockets` (realtime).
